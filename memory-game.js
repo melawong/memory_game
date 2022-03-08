@@ -51,13 +51,13 @@ function createCards(colors) {
   for (let i = 0; i < CARDS.length; i++) {
     CARDS[i].classList.add(colors[i]);
     CARDS[i].addEventListener("click", handleCardClick)
-  } 
+  }
 }
 
 /** Flip a card face-up. */
 
 function flipCard(cardNum, cardColor) {
-  let card; 
+  let card;
 
   for(let j = 0; j < CARDS.length; j++){
     if(CARDS[j].classList[0] === cardNum){
@@ -65,7 +65,7 @@ function flipCard(cardNum, cardColor) {
       clickCount +=1
     }
   }
-  //flip the card to its secret color 
+  //flip the card to its secret color
   card.setAttribute("style", `background-color: ${cardColor}`);
   console.log(clickCount)
 
@@ -76,7 +76,7 @@ function flipCard(cardNum, cardColor) {
     //declare the second card
     secondCard = card;
     noExtraClicks();
-    //if they clicked the same card twice, no. 
+    //if they clicked the same card twice, no.
     if(secondCard.classList[0] === firstCard.classList[0]){
       clickCount = 1;
       secondCard = undefined;
@@ -84,28 +84,26 @@ function flipCard(cardNum, cardColor) {
     } else {
       checkMatch();
     }
-  } 
+  }
 }
 
 function checkMatch(){
     clickCount = 0;
     if(firstCard.classList[1] === secondCard.classList[1]){
       matchCount += 1;
-      if(matchCount === 5){
-        alert("You Win!")
-      }
     } else {
       clickCount = 0;
       myTimeout();
-      
     }
     for(let card of CARDS){
       setTimeout(function(){card.addEventListener("click", handleCardClick)}, 800)
   }
+  updateCount();
+  checkWinner();
 }
-  
+
 function myTimeout(){
-  setTimeout(unFlipCard, 1000)
+  setTimeout(unFlipCard, 1000);
 }
 
 function noExtraClicks(){
@@ -122,24 +120,32 @@ function unFlipCard() {
 /** Handle clicking on a card: this could be first-card or second-card. */
 
 function handleCardClick(evt) {
-  // ... you need to write this ...
   let id = evt.target.classList;
   let cardColor = id[1];
   let cardNum = id[0];
 
-  
-  flipCard(cardNum, cardColor)
+  flipCard(cardNum, cardColor);
+}
 
-  
+function checkWinner(){
+  if(matchCount === 5){
+    setTimeout(handleWin, 500);
+  }
 }
 
 function handleWin(){
-    alert("You Win!")
+  alert("You Win!");
 }
 
-/**document.getElementsById("button").addEventListener("click", function(e){
-    e.preventDefault(); location.reload();})();
+function newGame(){
+  document.location.reload();
+}
 
-const matchDisplay = document.createElement("p");
-matchDisplay.setAttribute("class", "counter_display");
-matchDisplay.innerHTML = "match count: " + matchCount; */
+const btn = document.querySelector("#button");
+btn.addEventListener("click", newGame);
+
+function updateCount (){
+  const matchDisplay = document.getElementById("match_count");
+  matchDisplay.innerText = "match count: " + matchCount;
+}
+
